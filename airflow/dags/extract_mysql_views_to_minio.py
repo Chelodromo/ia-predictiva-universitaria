@@ -1,4 +1,4 @@
-﻿"""Extract enrollment data views from a remote MySQL and upload CSV snapshots to MinIO."""
+"""Extract enrollment data views from a remote MySQL and upload CSV snapshots to MinIO."""
 
 from __future__ import annotations
 
@@ -49,7 +49,14 @@ def _get_mysql_connection(conn_id: str, schema: str):
 
 
 def _extract_and_upload_views(**context):
-    run_dt = context.get("data_interval_end") or context["logical_date"]
+    dag_run = context.get("dag_run")
+    run_dt = (
+        context.get("data_interval_end")
+        or context.get("logical_date")
+        or getattr(dag_run, "logical_date", None)
+        or context.get("execution_date")
+        or datetime.utcnow()
+    )
     run_ts = run_dt.strftime("%Y%m%dT%H%M%S")
 
     schema = Variable.get("mysql_source_schema", default_var=DEFAULT_SCHEMA)
