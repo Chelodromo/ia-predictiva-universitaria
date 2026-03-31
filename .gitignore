@@ -1,5 +1,8 @@
 **/**/__pycache__
 
+# Datasets grandes (superar límite GitHub 100MB)
+training/data/*.csv
+
 .coverage
 .idea/
 
@@ -161,3 +164,4 @@ secrets/variables.yaml
 secrets/connections.yaml
 
 .env
+/secrets/connections.yaml
